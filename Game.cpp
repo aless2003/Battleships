@@ -129,14 +129,18 @@ bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column) {
 bool Game::placeNextRight(coos temp, int row, int column, Spieler * Player, char direction) {
     bool isValidX = false;
     bool isValidY = false;
+    bool secondOnSameSpace = false;
     if (!Player->Playfield.Playground[row][column].isShipHere()) {
         for (int i = 0; i < temp.x.size() && !isValidX; i++) {
             if (direction == 'y') {
                 isValidX = temp.x[i] + 1 == column || temp.x[i] - 1 == column;
             } else if(direction == 'x'){
                 isValidX = temp.x[i] == column;
-            } else {
-                isValidX = temp.x[i] + 1 == column || temp.x[i] - 1 == column || temp.x[i] == column;
+            } else if (temp.x[i] == column) {
+                isValidX = true;
+                secondOnSameSpace = true;
+            }   else {
+                isValidX = temp.x[i] + 1 == column || temp.x[i] - 1 == column;
             }
         }
         for (int i = 0; i < temp.y.size() && !isValidY; i++) {
@@ -144,8 +148,10 @@ bool Game::placeNextRight(coos temp, int row, int column, Spieler * Player, char
                 isValidY = temp.y[i] + 1 == row || temp.y[i] - 1 == row;
             } else if (direction == 'y'){
                 isValidY = temp.y[i] == row;
-            } else {
-                isValidY = temp.y[i] + 1 == row || temp.y[i] - 1 == row || temp.y[i] == row;
+            } else if(!secondOnSameSpace) {
+                isValidY = temp.y[i] == row;
+            } else{
+                isValidY = temp.y[i] + 1 == row || temp.y[i] - 1 == row;
             }
         }
     } else {
