@@ -29,6 +29,8 @@ public:
     void shoot(int, int, Spieler*);
     void run();
 
+    virtual ~Game();
+
 };
 
 

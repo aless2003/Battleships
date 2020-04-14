@@ -245,3 +245,7 @@ char Game::saveDirection(Game::coos First, int x, int y) {
     }
     return direction;
 }
+
+Game::~Game() {
+
+}
