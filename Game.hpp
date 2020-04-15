@@ -21,6 +21,7 @@ private:
     char saveDirection(coos,int, int);
     void placeShip(const Schiffe *, int, int, Spieler*);
     void intPlayer(Spieler*);
+    char InputChar(const string &currentShip, bool) const;
 public:
     void initialize();
     void play();
@@ -31,6 +32,10 @@ public:
 
     virtual ~Game();
 
+
+    int InputInt(const string &currentShip, bool) const;
+
+    void UserInput(const string &currentShip, char &tempChar, int &tempNum, bool) const;
 };
 
 

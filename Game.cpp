@@ -53,10 +53,7 @@ void Game::intPlayer(Spieler* Player) {
         }
 
         do {
-            cout << "Type the Vertical Coordinate of the Ship (" << currentShip << ") [A-J]";
-            cin >> tempChar;
-            cout << "Type the Horizontal Coordinate of the Ship (" << currentShip <<") [1-10]";
-            cin >> tempNum;
+            UserInput(currentShip, tempChar, tempNum, false);
         } while (!isPlacementPossible(Player1, size, tempNum, tempChar - 65));
         int x = tempNum - 1;
         int  y = tempChar - 65;
@@ -67,14 +64,10 @@ void Game::intPlayer(Spieler* Player) {
         //Restliche Teile
         for (int j = 0; j < size - 1; j++) {
             do{
-
-                cout << "Type the vertical position of the next part of your Ship [A-J]";
-                cin >> tempChar;
-                cout << "Type the horizontal position of the next part of your Ship [1-10]";
-                cin >> tempNum;
+                UserInput(currentShip, tempChar, tempNum, true);
             } while (!placeNextRight(temp, tempChar - 65, tempNum - 1, Player, direction));
-            int x = tempNum - 1;
-            int  y = tempChar - 65;
+            x = tempNum - 1;
+            y = tempChar - 65;
             if (j == 0) {
                 direction = saveDirection(temp,x,y);
             }
@@ -86,6 +79,48 @@ void Game::intPlayer(Spieler* Player) {
         temp.x.clear();
         direction = 'N';
     }
+}
+
+void Game::UserInput(const string &currentShip, char &tempChar, int &tempNum, bool isPart) const {
+    tempChar = InputChar(currentShip, isPart);
+    tempNum = InputInt(currentShip, isPart);
+}
+
+int Game::InputInt(const string &currentShip, bool isPart) const {
+    int tempNum = 0;
+    do {
+        if(isPart) {
+            cout << "Type the Horizontal Coordinate of the next Part of you Ship (" << currentShip << ") [1-10]";
+        }else{
+            cout << "Type the Horizontal Coordinate of the Ship (" << currentShip << ") [1-10]";
+        }
+        cin >> tempNum;
+        while (cin.fail())
+        {
+            cin.clear(); // clears input buffer to restore cin to a usable state
+            cin.ignore(INT_MAX, '\n'); // ignore last input
+            cout << "You can only enter numbers.\n";
+            tempNum = 11;
+        }
+    } while ((tempNum < 1 || tempNum > 10) );
+    return tempNum;
+}
+
+char Game::InputChar(const string &currentShip, bool isPart) const {
+    char tempChar;
+    do {
+
+        if(isPart) {
+            cout << "Type the Horizontal Coordinate of the next Part of you Ship (" << currentShip << ") [A-J]";
+        }else{
+            cout << "Type the Horizontal Coordinate of the Ship (" << currentShip << ") [A-J]";
+        }
+        cin >> tempChar;
+        cin.clear();
+        cin.ignore(INT_MAX, '\n');
+
+    } while (tempChar < 'A' || tempChar > 'J');
+    return tempChar;
 }
 
 bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column) {
@@ -104,6 +139,7 @@ bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column) {
                 }
                 x = temp;
             } else if (i == 1 && !x) {
+                temp = true;
                 for (int j = 1; j <= size && temp; j++) {
                     temp = !Player->Playfield.Playground[row - j][column].isShipHere();
                 }
@@ -111,11 +147,13 @@ bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column) {
             }
 
             if (i == 0 && !y) {
+                temp = true;
                 for (int j = 1; j <= size && temp; j++) {
                     temp = !Player->Playfield.Playground[row][column + j].isShipHere();
                 }
                 y = temp;
             } else if (i == 1 && !y) {
+                temp = true;
                 for (int j = 1; j <= size && temp; j++) {
                     temp = !Player->Playfield.Playground[row][column - j].isShipHere();
                 }
