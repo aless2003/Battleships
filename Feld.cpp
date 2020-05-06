@@ -23,3 +23,7 @@ bool Feld::isHitten() {
 void Feld::setShipAdress(Schiffe* x) {
     Ship = x;
 }
+
+Schiffe *Feld::getShip() const {
+    return Ship;
+}

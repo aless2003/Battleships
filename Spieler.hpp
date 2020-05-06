@@ -13,7 +13,8 @@ class Spieler {
     string _Name;
 public:
     Spielfeld Playfield;
-
+    vector <Schiffe*> shipAdressVector;
+    vector<Schiffe*> sunkenShips;
     const string &getName() const;
 
     void setName(const string &name);

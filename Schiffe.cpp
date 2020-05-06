@@ -31,3 +31,21 @@ Schiffe* Schiffe::createBattelship() {
 Schiffe::Schiffe() {
 
 }
+
+int Schiffe::getSize() const {
+    return _size;
+}
+
+int Schiffe::getHitsTaken() const {
+    return _hitsTaken;
+}
+
+void Schiffe::intHitsTaken() {
+    _hitsTaken = 0;
+}
+
+void Schiffe::increaseHit() {
+    _hitsTaken++;
+}
+
+

@@ -22,6 +22,10 @@ private:
     void placeShip(const Schiffe *, int, int, Spieler*);
     void intPlayer(Spieler*);
     char InputChar(const string &currentShip, bool) const;
+    int InputInt(const string &currentShip, bool) const;
+    //Shadowing für shoot Eingabe
+    int InputInt();
+    char InputChar();
 public:
     void initialize();
     void play();
@@ -29,12 +33,10 @@ public:
     void printPlayerData();
     void shoot(int, int, Spieler*);
     void run();
-
+    void winningMessage(Spieler*, Spieler*);
     virtual ~Game();
-
-
-    int InputInt(const string &currentShip, bool) const;
-
+    //Shadowing für Shoot Eingabe
+    void UserInput(char &tempChar, int &tempNum);
     void UserInput(const string &currentShip, char &tempChar, int &tempNum, bool) const;
 };
 

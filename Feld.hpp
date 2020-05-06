@@ -18,6 +18,8 @@ public:
     void setHit();
     bool isHitten();
     void setShipAdress(Schiffe*);
+
+    Schiffe *getShip() const;
 };
 
 

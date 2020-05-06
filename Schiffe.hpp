@@ -13,15 +13,18 @@ class Schiffe {
     int _size;
     int _hitsTaken;
 public:
+    void intHitsTaken();
+    void increaseHit();
     Schiffe(int size);
-
     Schiffe();
-
-public:
     Schiffe * createSubmarine();
     Schiffe* createDestroyer();
     Schiffe * createCarrier();
     Schiffe * createBattelship();
+
+    int getHitsTaken() const;
+
+    int getSize() const;
 };
 
 

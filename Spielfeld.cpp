@@ -8,15 +8,23 @@
 //cols - from top to bottom
 // row = [1] column = [2]
 void Spielfeld::printOwnField() {
+    int x = 'A';
     int rows =  sizeof Playground / sizeof Playground[0];
     int cols = sizeof Playground[0] / sizeof(Feld);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            if (Playground[i][j].isHitten() && Playground[i][j].isShipHere()){
+    for (int k = 0; k < rows; k++) {
+        cout << "  " <<k + 1;
+    }
+    cout << endl;
+    for (int i = 0; i < cols; i++) {
+        cout << (char)x;
+        x++;
+
+        for (int j = 0; j < rows; j++) {
+            if (Playground[j][i].isHitten() && Playground[j][i].isShipHere()){
                 cout << "[x]";
-            } else if (Playground[i][j].isHitten() && !Playground[i][j].isShipHere()) {
+            } else if (Playground[j][i].isHitten() && !Playground[j][i].isShipHere()) {
                 cout << "[~]";
-            } else if (Playground[i][j].isShipHere()){
+            } else if (Playground[j][i].isShipHere()){
                 cout << "[S]";
             } else {
                 cout << "[ ]";
@@ -27,13 +35,20 @@ void Spielfeld::printOwnField() {
 }
 
 void Spielfeld::printField(){
+    int x = 'A';
     int rows =  sizeof Playground / sizeof Playground[0];
     int cols = sizeof Playground[0] / sizeof(Feld);
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            if (Playground[i][j].isHitten() && Playground[i][j].isShipHere()){
+    for (int k = 0; k < rows; k++) {
+        cout << "  " <<k + 1;
+    }
+    cout << endl;
+    for (int i = 0; i < cols; i++) {
+        cout << (char)x;
+        x++;
+        for (int j = 0; j < rows; j++) {
+            if (Playground[j][i].isHitten() && Playground[j][i].isShipHere()){
                 cout << "[x]";
-            } else if (Playground[i][j].isHitten() && !Playground[i][j].isShipHere()) {
+            } else if (Playground[j][i].isHitten() && !Playground[j][i].isShipHere()) {
                 cout << "[~]";
             } else {
                 cout << "[ ]";
