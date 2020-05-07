@@ -2,7 +2,7 @@
 // Created by aless on 12.03.2020.
 //
 
-#include <zconf.h>
+
 #include "Game.hpp"
 void Game::run() {
     initialize();
@@ -10,18 +10,29 @@ void Game::run() {
 }
 
 void Game::initialize() {
+    bool fast = false;
+
+    fast = setFastMode();
+
     string tempName;
     cout << "Player 1 can place his Ships" << endl << "Type in your Name and Press Enter to show your field - make sure your opponent isn't looking on the Screen!";
     cin >> tempName;
     Player1->setName(tempName);
     Player1->Playfield.printOwnField();
-    intPlayer(Player1);
-
+    if (!fast) {
+        intPlayer(Player1);
+    } else {
+        intPlayerFast(Player1);
+    }
     cout << "Player 2 can place his Ships" << endl << "Type in your Name and Press Enter to show your field - make sure your opponent isn't looking on the Screen!";
     cin >> tempName;
     Player2->setName(tempName);
     Player2->Playfield.printOwnField();
-    intPlayer(Player2);
+    if (!fast) {
+        intPlayer(Player2);
+    } else {
+        intPlayerFast(Player2);
+    }
 }
 
 void Game::intPlayer(Spieler* Player) {
@@ -29,7 +40,7 @@ void Game::intPlayer(Spieler* Player) {
     int tempNum = 0 , size = 0;
     string currentShip;
     Schiffe tempShip;
-    Schiffe* tempShipAdress = NULL;
+    Schiffe* tempShipAdress = nullptr;
     int lastY = 0, lastX = 0;
     char direction = 'N';
 
@@ -85,12 +96,12 @@ void Game::intPlayer(Spieler* Player) {
     system("cls");
 }
 
-void Game::UserInput(const string &currentShip, char &tempChar, int &tempNum, bool isPart) const {
+void Game::UserInput(const string &currentShip, char &tempChar, int &tempNum, bool isPart) {
     tempChar = InputChar(currentShip, isPart);
     tempNum = InputInt(currentShip, isPart);
 }
 
-int Game::InputInt(const string &currentShip, bool isPart) const {
+int Game::InputInt(const string &currentShip, bool isPart) {
     int tempNum = 0;
     do {
         if(isPart) {
@@ -110,7 +121,7 @@ int Game::InputInt(const string &currentShip, bool isPart) const {
     return tempNum;
 }
 
-char Game::InputChar(const string &currentShip, bool isPart) const {
+char Game::InputChar(const string &currentShip, bool isPart) {
     char tempChar;
     do {
 
@@ -229,8 +240,8 @@ void Game::play() {
     char tempChar = ' ';
     bool hitValid = false;
     int x = 0, y = 0;
-    Spieler* Enemy = NULL;
-    Spieler* Player = NULL;
+    Spieler* Enemy = nullptr;
+    Spieler* Player = nullptr;
     string name;
     int tempNum = 0;
     int currentPlayer = 0;
@@ -280,7 +291,6 @@ void Game::play() {
             cin.ignore();
             system("cls");
         }
-        //TODO Winning Function
     } while (!won);
     winningMessage(Player, Enemy);
 }
@@ -309,7 +319,7 @@ bool Game::findWinner(Spieler *x) {
             }
         }
     }
-    if (x->shipAdressVector.size() == 0) {
+    if (x->shipAdressVector.empty()) {
         noShipLeft = true;
     }
     return noShipLeft;
@@ -326,16 +336,16 @@ char Game::saveDirection(Game::coos First, int x, int y) {
     return direction;
 }
 
-Game::~Game() {
-
-}
+Game::~Game() = default;
 
 void Game::UserInput(char &tempChar, int &tempNum) {
-    tempChar = InputChar();
-    tempNum = InputInt();
+    string msg1 = "Type the Horizontal Coordinate of your shooting guess [1-10]:";
+    string msg2 = "Type the Vertical Coordinate of your shooting guess [A-J]:";
+    tempChar = InputChar(msg2);
+    tempNum = InputInt(msg1);
 }
 
-int Game::InputInt(){
+int Game::InputInt(const string& message){
     int tempNum = 0;
     do {
         /*
@@ -344,7 +354,7 @@ int Game::InputInt(){
             cout << "Type the Horizontal Coordinate of your shooting guess [1-10]";
             cin >> tempNum;
          */
-        cout << "Type the Horizontal Coordinate of your shooting guess [1-10]:";
+        cout << message;
         cin >> tempNum;
         while (cin.fail())
         {
@@ -357,11 +367,11 @@ int Game::InputInt(){
     return tempNum;
 }
 
-char Game::InputChar() {
+char Game::InputChar(const string& message) {
     char tempChar;
     do {
 
-        cout << "Type the Vertical Coordinate of your shooting guess [A-J]:";
+        cout << message;
         cin >> tempChar;
         cin.clear();
         cin.ignore(INT_MAX, '\n');
@@ -371,11 +381,146 @@ char Game::InputChar() {
 }
 
 void Game::winningMessage(Spieler *Player, Spieler *Enemy) {
-    string name = Player->getName();
-    string enemyName = Enemy->getName();
+    const string& name = Player->getName();
+    const string& enemyName = Enemy->getName();
     cout << "Congratulations " << name << ", you have beaten " << enemyName << "!" << endl;
     sleep(1000);
     cin.ignore();
     cin.ignore();
+}
+
+void Game::intPlayerFast(Spieler* Player) {
+    char tempChar;
+    int tempNum = 0 , size = 0;
+    string currentShip;
+    Schiffe tempShip;
+    char direction;
+    Schiffe* tempShipAdress = nullptr;
+    for (int i = 0; i < 10; i++) {
+        if (i == 0) {
+            currentShip = "Carrier";
+            tempShipAdress = tempShip.createCarrier();
+            size = 5;
+        } else if (i > 0 && i < 3) {
+            currentShip = "Battleship";
+            tempShipAdress = tempShip.createBattelship();
+            size = 4;
+        } else if (i > 2 && i < 6) {
+            currentShip = "Destroyer";
+            tempShipAdress = tempShip.createDestroyer();
+            size = 3;
+        } else {
+            currentShip = "Submarine";
+            tempShipAdress = tempShip.createSubmarine();
+            size = 2;
+        }
+
+        do {
+            UserInput(currentShip, tempChar, tempNum, direction);
+        } while (!isPlacementPossible(Player, size, tempNum - 1, tempChar - 65, direction));
+        int row = tempNum - 1;
+        int column = tempChar - 65;
+        for (int j = 0; j < size; j++) {
+            if(direction == 'r'){
+                Player->Playfield.Playground[row + j][column].setShipAdress(tempShipAdress);
+                Player->Playfield.Playground[row + j][column].setShipHere();
+            } else if (direction == 'l') {
+                Player->Playfield.Playground[row - j]->setShipAdress(tempShipAdress);
+                Player->Playfield.Playground[row - j][column].setShipHere();
+            } else if (direction == 'u'){
+                Player->Playfield.Playground[row][column - j].setShipAdress(tempShipAdress);
+                Player->Playfield.Playground[row][column - j].setShipHere();
+            } else if(direction == 'd') {
+                Player->Playfield.Playground[row][column + j].setShipAdress(tempShipAdress);
+                Player->Playfield.Playground[row][column + j].setShipHere();
+            }
+        }
+        Player->Playfield.printOwnField();
+        Player->shipAdressVector.push_back(tempShipAdress);
+        tempShipAdress->intHitsTaken();
+    }
+}
+
+bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column, char direction) {
+    bool x = false;
+    bool y = false;
+    bool temp = true;
+    if (Player->Playfield.Playground[row][column].isShipHere()) {
+        // Ist der Ort überhaupt Frei?
+        return false;
+    } else {
+        if(direction == 'r'){
+            for (int i = 1; i <= size && temp; i++) {
+                if (row + i == 10) {
+                    temp = false;
+                } else {
+                    temp = !Player->Playfield.Playground[row + i][column].isShipHere();
+                }
+            }
+        } else if (direction == 'l') {
+            for (int i = 1; i <= size && temp; i++) {
+                if(row - i < 0){
+                    temp = false;
+                } else {
+                    temp = !Player->Playfield.Playground[row - i][column].isShipHere();
+                }
+            }
+        } else if (direction == 'u') {
+            for (int i = 1; i <= size && temp; i++) {
+                if(column - i < 0){
+                    temp = false;
+                } else {
+                    temp = !Player->Playfield.Playground[row][column - i].isShipHere();
+                }
+            }
+        } else if (direction == 'd'){
+            for (int i = 1; i <= size && temp; i++) {
+                if (column + i == 10){
+                    temp = false;
+                } else {
+                    temp = !Player->Playfield.Playground[row][column + i].isShipHere();
+                }
+            }
+        }
+    }
+    return temp;
+}
+
+void Game::UserInput(const string& Ship,char &tempChar, int &tempNum, char &direction) {
+    tempChar = InputChar(Ship, false);
+    tempNum = InputInt(Ship, false);
+    direction = InputDirection();
+}
+
+char Game::InputDirection() {
+    char tempDirection = ' ';
+    do{
+        cout << "What direction? [u = Up, d = Down, r = right, l = left]:";
+        cin >> tempDirection;
+        cin.clear();
+        cin.ignore(INT_MAX, '\n');
+        if (tempDirection >= 'A' && tempDirection <= 'Z') {
+            tempDirection = (char)(tempDirection - ('a' - 'A'));
+        }
+    } while (tempDirection != 'u' && tempDirection != 'd' && tempDirection != 'r' && tempDirection != 'l');
+    return tempDirection;
+}
+
+bool Game::setFastMode() {
+    int Awnser;
+    cout << endl << "Fast Mode on or off?" << endl;
+    do {
+        cout<< endl << "1. on" << endl;
+        cout<< "2. off" << endl;
+        cin >> Awnser;
+        while (cin.fail())
+        {
+            cin.clear(); // clears input buffer to restore cin to a usable state
+            cin.ignore(INT_MAX, '\n'); // ignore last input
+            cout << "You can only enter numbers.\n";
+            Awnser = 0;
+        }
+    } while (Awnser != 1 && Awnser != 2);
+    return Awnser == 1;
 }
 
