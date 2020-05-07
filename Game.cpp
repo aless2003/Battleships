@@ -15,7 +15,7 @@ void Game::initialize() {
     fast = setFastMode();
 
     string tempName;
-    cout << "Player 1 can place his Ships" << endl << "Type in your Name and Press Enter to show your field - make sure your opponent isn't looking on the Screen!";
+    cout << "Player 1 can place his Ships" << endl << "Type in your Name and Press Enter to show your field - make sure your opponent isn't looking on the Screen!" << endl;
     cin >> tempName;
     Player1->setName(tempName);
     Player1->Playfield.printOwnField();
@@ -24,7 +24,8 @@ void Game::initialize() {
     } else {
         intPlayerFast(Player1);
     }
-    cout << "Player 2 can place his Ships" << endl << "Type in your Name and Press Enter to show your field - make sure your opponent isn't looking on the Screen!";
+    system("cls");
+    cout << "Player 2 can place his Ships" << endl << "Type in your Name and Press Enter to show your field - make sure your opponent isn't looking on the Screen!" << endl;
     cin >> tempName;
     Player2->setName(tempName);
     Player2->Playfield.printOwnField();
@@ -93,7 +94,6 @@ void Game::intPlayer(Spieler* Player) {
         direction = 'N';
         tempShipAdress->intHitsTaken();
     }
-    system("cls");
 }
 
 void Game::UserInput(const string &currentShip, char &tempChar, int &tempNum, bool isPart) {
@@ -450,7 +450,7 @@ bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column, c
         return false;
     } else {
         if(direction == 'r'){
-            for (int i = 1; i <= size && temp; i++) {
+            for (int i = 0; i < size && temp; i++) {
                 if (row + i == 10) {
                     temp = false;
                 } else {
@@ -458,7 +458,7 @@ bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column, c
                 }
             }
         } else if (direction == 'l') {
-            for (int i = 1; i <= size && temp; i++) {
+            for (int i = 0; i < size && temp; i++) {
                 if(row - i < 0){
                     temp = false;
                 } else {
@@ -466,7 +466,7 @@ bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column, c
                 }
             }
         } else if (direction == 'u') {
-            for (int i = 1; i <= size && temp; i++) {
+            for (int i = 0; i < size && temp; i++) {
                 if(column - i < 0){
                     temp = false;
                 } else {
@@ -474,7 +474,7 @@ bool Game::isPlacementPossible(Spieler* Player, int size, int row, int column, c
                 }
             }
         } else if (direction == 'd'){
-            for (int i = 1; i <= size && temp; i++) {
+            for (int i = 0; i < size && temp; i++) {
                 if (column + i == 10){
                     temp = false;
                 } else {
