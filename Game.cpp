@@ -109,6 +109,21 @@ int Game::InputInt(const string &currentShip, bool isPart) {
         }else{
             cout << "Type the Vertical Coordinate of the Ship (" << currentShip << ") [1-10]";
         }
+
+        cin >> tempNum;
+        try {
+            if(cin.fail()){
+                throw ("Error. Invalid Input. You can only enter Numbers");
+            }
+        } catch(const char* error){
+            cout << error << endl;
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+            tempNum = 11;
+        }
+
+        /*
+         * Old.Version
         cin >> tempNum;
         while (cin.fail())
         {
@@ -117,6 +132,7 @@ int Game::InputInt(const string &currentShip, bool isPart) {
             cout << "You can only enter numbers.\n";
             tempNum = 11;
         }
+         */
     } while ((tempNum < 1 || tempNum > 10) );
     return tempNum;
 }
@@ -124,7 +140,6 @@ int Game::InputInt(const string &currentShip, bool isPart) {
 char Game::InputChar(const string &currentShip, bool isPart) {
     char tempChar;
     do {
-
         if(isPart) {
             cout << "Type the Horizontal Coordinate of the next Part of you Ship (" << currentShip << ") [A-J]";
         }else{
@@ -348,14 +363,20 @@ void Game::UserInput(char &tempChar, int &tempNum) {
 int Game::InputInt(const string& message){
     int tempNum = 0;
     do {
-        /*
-            cout << "Type the Vertical Coordinate of your shooting guess [A-J]";
-            cin >> tempChar;
-            cout << "Type the Horizontal Coordinate of your shooting guess [1-10]";
-            cin >> tempNum;
-         */
         cout << message;
         cin >> tempNum;
+        try{
+            if (cin.fail()){
+                throw ("Error. Invalid Input. You can only Enter Numbers.");
+            }
+        } catch (const char* error) {
+            cout << error << endl;
+            cin.clear();
+            cin.ignore();
+            tempNum = 11;
+        }
+        /*
+         * Old.Version
         while (cin.fail())
         {
             cin.clear(); // clears input buffer to restore cin to a usable state
@@ -363,6 +384,7 @@ int Game::InputInt(const string& message){
             cout << "You can only enter numbers.\n";
             tempNum = 11;
         }
+         */
     } while ((tempNum < 1 || tempNum > 10));
     return tempNum;
 }
