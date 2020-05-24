@@ -146,6 +146,9 @@ char Game::InputChar(const string &currentShip, bool isPart) {
             cout << "Type the Horizontal Coordinate of the Ship (" << currentShip << ") [A-J]";
         }
         cin >> tempChar;
+        if (tempChar >= 'a' && tempChar <= 'z') {
+            tempChar = (char)(tempChar - ('a' - 'A'));
+        }
         cin.clear();
         cin.ignore(INT_MAX, '\n');
 
