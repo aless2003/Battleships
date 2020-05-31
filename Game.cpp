@@ -11,9 +11,9 @@ void Game::run() {
 
 void Game::initialize() {
     bool fast = false;
-
     fast = setFastMode();
-
+    system("cls");
+    printRules();
     string tempName;
     cout << "Player 1 can place his Ships" << endl << "Type in your Name and Press Enter to show your field - make sure your opponent isn't looking on the Screen!" << endl;
     cin >> tempName;
@@ -319,14 +319,12 @@ void Game::shoot(int x, int y, Spieler* Player) {
 }
 
 bool Game::findWinner(Spieler *x) {
-    bool noShipLeft = false;
-
-        for (int j = 0; j < 10; j++) {
-            for (int k = 0; k < 10; k++) {
+        for (auto & j : x->Playfield.Playground) {
+            for (auto & k : j) {
                 for(int i = 0; i < x->shipAdressVector.size(); i++){
-                    if(x->Playfield.Playground[j][k].isShipHere()) {
-                        if(x->Playfield.Playground[j][k].isHitten()) {
-                            if (x->Playfield.Playground[j][k].getShip() == x->shipAdressVector[i]) {
+                    if(k.isShipHere()) {
+                        if(k.isHitten()) {
+                            if (k.getShip() == x->shipAdressVector[i]) {
                                 if (x->shipAdressVector[i]->getHitsTaken() == x->shipAdressVector[i]->getSize()) {
                                     x->sunkenShips.push_back(x->shipAdressVector[i]);
                                     x->shipAdressVector.erase(x->shipAdressVector.begin() + i);
@@ -337,10 +335,7 @@ bool Game::findWinner(Spieler *x) {
             }
         }
     }
-    if (x->shipAdressVector.empty()) {
-        noShipLeft = true;
-    }
-    return noShipLeft;
+    return x->shipAdressVector.empty();
 }
 
 char Game::saveDirection(Game::coos First, int x, int y) {
@@ -409,7 +404,7 @@ void Game::winningMessage(Spieler *Player, Spieler *Enemy) {
     const string& name = Player->getName();
     const string& enemyName = Enemy->getName();
     cout << "Congratulations " << name << ", you have beaten " << enemyName << "!" << endl;
-    sleep(1000);
+    Sleep(1000);
     cin.ignore();
     cin.ignore();
 }
@@ -549,3 +544,23 @@ bool Game::setFastMode() {
     return Awnser == 1;
 }
 
+void Game::printRules(){
+    cin.ignore(); // Delete last enter from "cin"
+    cout << "Welcome to the best Battleships Program in the whole universe!" << endl;
+    cout << "Zuerst starten wir mit den Regeln." << endl;
+    Sleep(1000);
+    cout << "1. Regel: ";
+    cout << "Die Schiffe duerfen nicht aneinanderstossen." << endl;
+    Sleep(1000);
+    cout << "2. Regel: ";
+    cout << "Die Schiffe duerfen nicht ueber Eck gebaut sein oder Ausbuchtungen besitzen." << endl;
+    Sleep(1000);
+    cout << "3. Regel: ";
+    cout << "Die Schiffe duerfen auch am Rand liegen." << endl;
+    Sleep(1000);
+    cout << "4. Regel: ";
+    cout << "Die Schiffe duerfen nicht diagonal aufgestellt werden." << endl;
+    cout << "Press enter to continue";
+    cin.ignore(); //"to wait until someone presses enter"
+    system("cls");
+}
