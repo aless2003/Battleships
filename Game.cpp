@@ -10,6 +10,7 @@ void Game::run() {
 }
 
 void Game::initialize() {
+    AudioSystem::playSound();
     bool fast = false;
     fast = setFastMode();
     system("cls");

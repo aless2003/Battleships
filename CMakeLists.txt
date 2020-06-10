@@ -1,6 +1,6 @@
-# cmake_minimum_required(VERSION <specify CMake version here>)
+cmake_minimum_required(VERSION 3.0)
 project(Battleships)
 
 set(CMAKE_CXX_STANDARD 14)
-
-add_executable(Battleships main.cpp Spielfeld.cpp Spielfeld.hpp Spieler.cpp Spieler.hpp Schiffe.cpp Schiffe.hpp Game.cpp Game.hpp Feld.cpp Feld.hpp)
+link_libraries(winmm)
+add_executable(Battleships main.cpp Spielfeld.cpp Spielfeld.hpp Spieler.cpp Spieler.hpp Schiffe.cpp Schiffe.hpp Game.cpp Game.hpp Feld.cpp Feld.hpp AudioSystem.cpp AudioSystem.hpp)
