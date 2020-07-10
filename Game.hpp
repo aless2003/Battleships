@@ -9,6 +9,7 @@
 #include "Schiffe.hpp"
 #include <windows.h>
 #include "AudioSystem.hpp"
+#include <thread>
 
 class Game {
 private:

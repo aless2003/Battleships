@@ -1,8 +1,6 @@
 //
 // Created by aless on 12.03.2020.
 //
-
-
 #include "Game.hpp"
 void Game::run() {
     initialize();
@@ -10,7 +8,8 @@ void Game::run() {
 }
 
 void Game::initialize() {
-    AudioSystem::playSound();
+    pthread_t music;
+    pthread_create(&music, NULL, reinterpret_cast<void *(*)(void *)>(AudioSystem::playSound), NULL);
     bool fast = false;
     fast = setFastMode();
     system("cls");

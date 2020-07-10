@@ -8,6 +8,8 @@
 #include <mmsystem.h>
 #include <iostream>
 #include <fstream>
+#include <dirent.h>
+#include <pthread.h>
 
 using namespace std;
 
